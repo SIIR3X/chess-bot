@@ -1,0 +1,13 @@
+<map id="ChessBotTests/test.cpp" name="ChessBotTests/test.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="50,5,222,31"/>
+<area shape="rect" id="Node000002" href="$pch_8h.html" title=" " alt="" coords="50,79,107,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,33,99,70,95,66,124,29"/>
+<area shape="rect" id="Node000004" href="$ChessBotCore_8h.html" title=" " alt="" coords="143,79,268,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="149,29,187,67,183,71,146,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,109,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="78,105,67,140,62,138,73,104"/>
+<area shape="rect" id="Node000005" href="$chessbotcore__global_8h.html" title=" " alt="" coords="134,152,301,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="210,104,216,138,210,139,205,105"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="152,225,283,251"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="220,178,220,212,215,212,215,178"/>
+</map>
