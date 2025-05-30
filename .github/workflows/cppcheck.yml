@@ -1,0 +1,32 @@
+name: C++ Code Analysis with CppCheck
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    branches: ['*']
+
+jobs:
+  cppcheck:
+    name: CppCheck Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install cppcheck
+        run: sudo apt-get install -y cppcheck
+
+      - name: Run cppcheck
+        run: |
+          cppcheck --enable=all \
+                   --std=c++20 \
+                   --language=c++ \
+                   --inconclusive \
+                   --suppress=missingIncludeSystem \
+                   -I ChessBotCore/include \
+                   ChessBotCore/src \
+                   --error-exitcode=1
