@@ -70,7 +70,17 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\dev\opencv\build\x64\vc16\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world4110d.lib;opencv_world4110.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world4110d.lib;opencv_world4110.lib;d3d11.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;C:\dev\opencv\build\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Qt\6.9.0\msvc2022_64\lib;C:\dev\opencv\build\x64\vc16\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world4110d.lib;opencv_world4110.lib;d3d11.lib;dxgi.lib;dxguid.lib;Qt6Gui.lib;Qt6Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -106,9 +116,11 @@
   <ItemGroup>
     <ClInclude Include="include\chessbotcore_global.h" />
     <ClInclude Include="include\ChessBotCore.h" />
+    <ClCompile Include="src\ScreenRecorder.cpp" />
     <ClCompile Include="src\ScreenManager.cpp" />
     <ClCompile Include="src\ChessBotCore.cpp" />
     <ClInclude Include="include\ScreenManager.h" />
+    <ClInclude Include="include\ScreenRecorder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

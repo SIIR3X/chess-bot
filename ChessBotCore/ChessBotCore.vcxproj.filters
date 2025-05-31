@@ -35,9 +35,15 @@
     <ClInclude Include="include\ScreenManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ScreenRecorder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ScreenManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ScreenRecorder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
