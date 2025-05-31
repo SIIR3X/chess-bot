@@ -12,9 +12,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6618C791-7467-497A-9B3D-31AEB451D568}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\cppcheck.yml = .github\workflows\cppcheck.yml
+		.gitignore = .gitignore
 		Doxyfile = Doxyfile
 		.github\workflows\doxygen.yml = .github\workflows\doxygen.yml
-		gitignore = gitignore
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection

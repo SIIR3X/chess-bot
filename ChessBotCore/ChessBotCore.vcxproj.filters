@@ -32,5 +32,13 @@
     <ClInclude Include="include\ChessBotCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\ScreenManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ScreenManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
