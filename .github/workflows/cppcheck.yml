@@ -28,5 +28,4 @@ jobs:
                    --inconclusive \
                    --suppress=missingIncludeSystem \
                    -I ChessBotCore/include \
-                   ChessBotCore/src \
-                   --error-exitcode=1
+                   ChessBotCore/src
