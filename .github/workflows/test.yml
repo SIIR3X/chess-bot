@@ -18,10 +18,10 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Build ChessBotCore (Debug)
-        run: msbuild ChessBotCore/ChessBotCore.vcxproj /p:Configuration=Debug /p:AdditionalIncludeDirectories="ChessBotCore\\include;%(AdditionalIncludeDirectories)"
+        run: msbuild ChessBotCore/ChessBotCore.vcxproj /p:Configuration=Debug /p:AdditionalIncludeDirectories="ChessBotCore\\include"
 
       - name: Build ChessBotTests (Debug)
-        run: msbuild ChessBotTests/ChessBotTests.vcxproj /p:Configuration=Debug /p:AdditionalIncludeDirectories="ChessBotCore\\include;%(AdditionalIncludeDirectories)"
+        run: msbuild ChessBotTests/ChessBotTests.vcxproj /p:Configuration=Debug /p:AdditionalIncludeDirectories="ChessBotCore\\include"
 
       - name: Run tests
         run: |
