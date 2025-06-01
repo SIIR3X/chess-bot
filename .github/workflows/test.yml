@@ -17,9 +17,6 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Debug: contenu du dossier include
-        run: dir ChessBotCore\include
-
       - name: Build ChessBotCore
         run: |
           echo "Chemin complet : ${{ github.workspace }}\ChessBotCore\include"
