@@ -5,9 +5,10 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessBot", "ChessBot\ChessBot.vcxproj", "{F6BB852A-4F3B-4214-B85F-F14682934A31}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessBotCore", "ChessBotCore\ChessBotCore.vcxproj", "{11C41E83-6D2A-4D47-83FE-226F1C1F8518}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessBotTests", "ChessBotTests\ChessBotTests.vcxproj", "{6FC1B51B-246A-4C6A-95A2-E57787D744FD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9D760197-3C32-4AC1-A447-7108C91E174B} = {9D760197-3C32-4AC1-A447-7108C91E174B}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6618C791-7467-497A-9B3D-31AEB451D568}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessBotCore", "ChessBotCore\ChessBotCore.vcxproj", "{9D760197-3C32-4AC1-A447-7108C91E174B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -29,14 +32,14 @@ Global
 		{F6BB852A-4F3B-4214-B85F-F14682934A31}.Debug|x64.Build.0 = Debug|x64
 		{F6BB852A-4F3B-4214-B85F-F14682934A31}.Release|x64.ActiveCfg = Release|x64
 		{F6BB852A-4F3B-4214-B85F-F14682934A31}.Release|x64.Build.0 = Release|x64
-		{11C41E83-6D2A-4D47-83FE-226F1C1F8518}.Debug|x64.ActiveCfg = Debug|x64
-		{11C41E83-6D2A-4D47-83FE-226F1C1F8518}.Debug|x64.Build.0 = Debug|x64
-		{11C41E83-6D2A-4D47-83FE-226F1C1F8518}.Release|x64.ActiveCfg = Release|x64
-		{11C41E83-6D2A-4D47-83FE-226F1C1F8518}.Release|x64.Build.0 = Release|x64
 		{6FC1B51B-246A-4C6A-95A2-E57787D744FD}.Debug|x64.ActiveCfg = Debug|x64
 		{6FC1B51B-246A-4C6A-95A2-E57787D744FD}.Debug|x64.Build.0 = Debug|x64
 		{6FC1B51B-246A-4C6A-95A2-E57787D744FD}.Release|x64.ActiveCfg = Release|x64
 		{6FC1B51B-246A-4C6A-95A2-E57787D744FD}.Release|x64.Build.0 = Release|x64
+		{9D760197-3C32-4AC1-A447-7108C91E174B}.Debug|x64.ActiveCfg = Debug|x64
+		{9D760197-3C32-4AC1-A447-7108C91E174B}.Debug|x64.Build.0 = Debug|x64
+		{9D760197-3C32-4AC1-A447-7108C91E174B}.Release|x64.ActiveCfg = Release|x64
+		{9D760197-3C32-4AC1-A447-7108C91E174B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -65,8 +65,8 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\Qt\6.9.0\msvc2022_64\lib;C:\dev\opencv\build\lib\Debug;C:\dev\onnxruntime\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_core4110d.lib;opencv_imgproc4110d.lib;opencv_highgui4110d.lib;opencv_imgcodecs4110d.lib;opencv_dnn4110d.lib;Qt6Cored.lib;Qt6Core.lib;Qt6Guid.lib;Qt6Gui.lib;onnxruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)x64\Debug;C:\dev\opencv\build\lib\Debug;C:\dev\onnxruntime\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ChessBotCore.lib;opencv_core4110d.lib;opencv_imgproc4110d.lib;opencv_highgui4110d.lib;opencv_imgcodecs4110d.lib;opencv_dnn4110d.lib;onnxruntime.lib;d3d11.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
