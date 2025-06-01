@@ -17,6 +17,9 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Supprime pch.cpp (workaround CI)
+        run: del ChessBotCore\src\pch.cpp
+
       - name: Build ChessBotCore (PCH désactivé)
         run: msbuild ChessBotCore\ChessBotCore.vcxproj /p:Configuration=Release /p:UsePrecompiledHeader=false
 
