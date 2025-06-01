@@ -1,4 +1,4 @@
-name: CI ChessBot Tests
+name: CI ChessBotCore & ChessBotTests
 
 on:
   push:
@@ -17,14 +17,11 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Add Qt to PATH
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: '6.9.0'
-          arch: win64_msvc2019_64
-
       - name: Build Solution
         run: msbuild ChessBot.sln /p:Configuration=Release
+
+      - name: List test binaries (debug)
+        run: dir ChessBotTests\Release
 
       - name: Run ChessBotTests
         run: |
