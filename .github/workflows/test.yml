@@ -17,11 +17,21 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Debug: contenu du dossier include
+        run: dir ChessBotCore\include
+
       - name: Build ChessBotCore
-        run: msbuild ChessBotCore\ChessBotCore.vcxproj /p:Configuration=Release /p:AdditionalIncludeDirectories="ChessBotCore\include"
+        run: |
+          echo "Chemin complet : ${{ github.workspace }}\ChessBotCore\include"
+          $env:INCLUDE="${{ github.workspace }}\ChessBotCore\include;$env:INCLUDE"
+          msbuild ChessBotCore\ChessBotCore.vcxproj /p:Configuration=Release
+        shell: pwsh
 
       - name: Build ChessBotTests
-        run: msbuild ChessBotTests\ChessBotTests.vcxproj /p:Configuration=Release /p:AdditionalIncludeDirectories="ChessBotCore\include"
+        run: |
+          $env:INCLUDE="${{ github.workspace }}\ChessBotCore\include;$env:INCLUDE"
+          msbuild ChessBotTests\ChessBotTests.vcxproj /p:Configuration=Release
+        shell: pwsh
 
       - name: List test binaries (debug)
         run: dir ChessBotTests\Release
