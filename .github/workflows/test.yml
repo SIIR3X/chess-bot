@@ -1,4 +1,4 @@
-name: Run Google Tests
+name: C++ Unit Tests with Google Test
 
 on:
   push:
@@ -6,29 +6,35 @@ on:
       - main
       - staging
   pull_request:
-    branches: ['*']
 
 jobs:
-  build-and-test:
+  googletest:
+    name: GoogleTest on Windows
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup MSBuild path
-      uses: microsoft/setup-msbuild@v2
+      - name: Install vcpkg
+        uses: lukka/run-vcpkg@v11
 
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v2
+      - name: Install OpenCV
+        run: vcpkg install opencv
 
-    - name: Restore NuGet packages
-      run: nuget restore ChessBot.sln
+      - name: Integrate vcpkg with MSBuild
+        run: vcpkg integrate install
 
-    - name: Build solution
-      run: msbuild ChessBot.sln /p:Configuration=Debug
+      - name: Restore NuGet packages
+        run: nuget restore ChessBot.sln
 
-    - name: Run Google Tests
-      run: |
-        cd ChessBot/ChessBotTests/x64/Debug
-        .\ChessBotTests.exe --gtest_output=xml:TestResults.xml
+      - name: Build ChessBotCore
+        run: msbuild ChessBotCore/ChessBotCore.vcxproj /p:Configuration=Debug
+
+      - name: Build ChessBotTests
+        run: msbuild ChessBotTests/ChessBotTests.vcxproj /p:Configuration=Debug
+
+      - name: Run Google Tests
+        run: |
+          cd ChessBotTests/x64/Debug
+          .\ChessBotTests.exe --gtest_output=xml:TestResults.xml
