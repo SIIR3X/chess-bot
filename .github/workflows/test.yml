@@ -17,8 +17,11 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Build Solution
-        run: msbuild ChessBot.sln /p:Configuration=Release
+      - name: Build ChessBotCore
+        run: msbuild ChessBotCore\ChessBotCore.vcxproj /p:Configuration=Release
+
+      - name: Build ChessBotTests
+        run: msbuild ChessBotTests\ChessBotTests.vcxproj /p:Configuration=Release
 
       - name: List test binaries (debug)
         run: dir ChessBotTests\Release
