@@ -22,8 +22,9 @@ jobs:
 
       - name: Download and Extract OpenCV
         run: |
-          curl -L -o opencv.zip https://github.com/opencv/opencv/releases/download/4.5.5/opencv-4.5.5-vc14_vc15.zip
-          7z x opencv.zip -oopencv
+         curl -L -o opencv.exe https://github.com/opencv/opencv/releases/download/4.5.5/opencv-4.5.5-vc14_vc15.exe
+         7z x opencv.exe -oopencv
+
 
       - name: Build ChessBotCore (Debug)
         run: msbuild ChessBotCore/ChessBotCore.vcxproj /p:Configuration=Debug
