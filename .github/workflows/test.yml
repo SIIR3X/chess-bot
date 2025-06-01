@@ -2,9 +2,7 @@ name: C++ Unit Tests with Google Test
 
 on:
   push:
-    branches:
-      - main
-      - staging
+    branches: [main, staging]
   pull_request:
 
 jobs:
@@ -16,14 +14,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install vcpkg
-        uses: lukka/run-vcpkg@v11
-
-      - name: Install OpenCV
-        run: vcpkg install opencv
+      - name: Install vcpkg and OpenCV
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
+          .\bootstrap-vcpkg.bat
+          .\vcpkg.exe install opencv
 
       - name: Integrate vcpkg with MSBuild
-        run: vcpkg integrate install
+        run: |
+          cd vcpkg
+          .\vcpkg.exe integrate install
 
       - name: Restore NuGet packages
         run: nuget restore ChessBot.sln
