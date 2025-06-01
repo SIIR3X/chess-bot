@@ -1,12 +1,10 @@
 #pragma once
 
-#include <QtCore/qglobal.h>
-
-#ifndef BUILD_STATIC
-# if defined(CHESSBOTCORE_LIB)
-#  define CHESSBOTCORE_EXPORT Q_DECL_EXPORT
+#ifdef _WIN32
+# ifdef CHESSBOTCORE_LIB
+#  define CHESSBOTCORE_EXPORT __declspec(dllexport)
 # else
-#  define CHESSBOTCORE_EXPORT Q_DECL_IMPORT
+#  define CHESSBOTCORE_EXPORT __declspec(dllimport)
 # endif
 #else
 # define CHESSBOTCORE_EXPORT
