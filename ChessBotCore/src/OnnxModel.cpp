@@ -5,13 +5,13 @@ OnnxModel::OnnxModel(const std::string& modelPath,
 					 int inputWidth, int inputHeight,
 					 float confidenceThreshold,
 					 float nmsThreshold)
-	: env_(ORT_LOGGING_LEVEL_WARNING, "OnnxModel"),
-	  sessionOptions_{},
-	  session_(nullptr),
-	  inputWidth_(inputWidth),
+	: inputWidth_(inputWidth),
 	  inputHeight_(inputHeight),
 	  confidenceThreshold_(confidenceThreshold),
-	  nmsThreshold_(nmsThreshold)
+	  nmsThreshold_(nmsThreshold),
+	  env_(ORT_LOGGING_LEVEL_WARNING, "OnnxModel"),
+	  session_(nullptr),
+	  sessionOptions_{}
 {
 	std::wstring wModelPath(modelPath.begin(), modelPath.end());
 
@@ -117,8 +117,15 @@ std::vector<float> OnnxModel::infer(const std::vector<float>& inputTensor)
 
 	// Convert input/output names to C-style strings
 	std::vector<const char*> inputNamesCStr, outputNamesCStr;
-	for (const auto& s : inputNames_) inputNamesCStr.push_back(s.c_str());
-	for (const auto& s : outputNames_) outputNamesCStr.push_back(s.c_str());
+
+	std::transform(inputNames_.begin(), inputNames_.end(),
+		std::back_inserter(inputNamesCStr),
+		[](const std::string& s) { return s.c_str(); });
+
+	std::transform(outputNames_.begin(), outputNames_.end(),
+		std::back_inserter(outputNamesCStr),
+		[](const std::string& s) { return s.c_str(); });
+
 
 	// Run inference
 	auto outputTensors = session_.Run(
@@ -134,33 +141,50 @@ std::vector<float> OnnxModel::infer(const std::vector<float>& inputTensor)
 	return std::vector<float>(outputData, outputData + outputSize);
 }
 
-std::vector<Detection> OnnxModel::postprocess(const std::vector<float>& output, float r, int dw, int dh, const std::vector<int64_t>& shape) const
+std::vector<Detection> OnnxModel::postprocess(const std::vector<float>& output,
+											  float r, int dw, int dh,
+											  const std::vector<int64_t>& shape) const
 {
 	std::vector<cv::Rect> boxes;
 	std::vector<float> scores;
 	std::vector<int> classIds;
 
-	int numAttrs = shape[1]; // Number of attributes per prediction
-	int numPreds = shape[2];
-	int numClasses = numAttrs > 5 ? numAttrs - 5 : 0;
+	const int numAttrs = static_cast<int>(shape[1]); // Attributes per prediction
+	const int numPreds = static_cast<int>(shape[2]);
+	const int numClasses = numAttrs > 5 ? numAttrs - 5 : 0;
 
-	// Iterate through all predictions
+	// Indices for fixed attributes
+	constexpr int IDX_CX = 0;
+	constexpr int IDX_CY = 1;
+	constexpr int IDX_W = 2;
+	constexpr int IDX_H = 3;
+	constexpr int IDX_OBJECTNESS = 4;
+	constexpr int SCORE_OFFSET = 5;
+
+	// Precomputed attribute offsets
+	const int offsetCX = IDX_CX * numPreds;
+	const int offsetCY = IDX_CY * numPreds;
+	const int offsetW = IDX_W * numPreds;
+	const int offsetH = IDX_H * numPreds;
+	const int offsetObj = IDX_OBJECTNESS * numPreds;
+
 	for (int i = 0; i < numPreds; ++i) {
-		float cx = output[0 * numPreds + i];
-		float cy = output[1 * numPreds + i];
-		float w = output[2 * numPreds + i];
-		float h = output[3 * numPreds + i];
-		float objectness = output[4 * numPreds + i];
+		// Check if the objectness score is above the threshold
+		float objectness = output[offsetObj + i];
+		if (objectness < confidenceThreshold_)
+			continue;
 
-		float finalScore = 0.0f;
+		float finalScore = objectness;
 		int classId = 0;
 
-		// If class scores exist, combine with objectness
+		// If there are classes, find the best class score
 		if (numClasses > 0) {
 			float bestClassScore = 0.0f;
 
+			// Iterate through class scores to find the best one
 			for (int c = 0; c < numClasses; ++c) {
-				float classScore = output[(5 + c) * numPreds + i];
+				int classScoreIndex = (SCORE_OFFSET + c) * numPreds + i;
+				float classScore = output[classScoreIndex];
 				float conf = objectness * classScore;
 
 				if (conf > bestClassScore) {
@@ -168,18 +192,21 @@ std::vector<Detection> OnnxModel::postprocess(const std::vector<float>& output, 
 					classId = c;
 				}
 			}
+
 			finalScore = bestClassScore;
 		}
-		else {
-			finalScore = objectness;
-		}
 
-		// Apply confidence threshold
+		// Check if the final score is above the confidence threshold
 		if (finalScore > confidenceThreshold_) {
-			int x1 = int((cx - w / 2 - dw) / r);
-			int y1 = int((cy - h / 2 - dh) / r);
-			int x2 = int((cx + w / 2 - dw) / r);
-			int y2 = int((cy + h / 2 - dh) / r);
+			float cx = output[offsetCX + i];
+			float cy = output[offsetCY + i];
+			float w = output[offsetW + i];
+			float h = output[offsetH + i];
+
+			int x1 = static_cast<int>((cx - w / 2 - dw) / r);
+			int y1 = static_cast<int>((cy - h / 2 - dh) / r);
+			int x2 = static_cast<int>((cx + w / 2 - dw) / r);
+			int y2 = static_cast<int>((cy + h / 2 - dh) / r);
 
 			boxes.emplace_back(cv::Rect(cv::Point(x1, y1), cv::Point(x2, y2)));
 			scores.push_back(finalScore);
@@ -187,22 +214,24 @@ std::vector<Detection> OnnxModel::postprocess(const std::vector<float>& output, 
 		}
 	}
 
-	// Run Non-Maximum Suppression (NMS) to filter overlapping boxes
+	// Apply Non-Maximum Suppression (NMS)
 	std::vector<int> keep;
 	nms(boxes, scores, nmsThreshold_, keep);
 
 	// Collect final detections
 	std::vector<Detection> detections;
-	for (int idx : keep) {
-		detections.push_back({ boxes[idx], scores[idx], classIds[idx] });
-	}
+	detections.reserve(keep.size());
+	std::transform(keep.begin(), keep.end(), std::back_inserter(detections),
+		[&](int idx) {
+			return Detection{ boxes[idx], scores[idx], classIds[idx] };
+		});
 
 	return detections;
 }
 
 void OnnxModel::nms(const std::vector <cv::Rect>& boxes,
 	const std::vector<float>& scores,
-	float iouThresh, std::vector<int>& keep) const
+	float iouThresh, std::vector<int>& keep)
 {
 	std::vector<int> idxs(boxes.size());
 	std::iota(idxs.begin(), idxs.end(), 0);

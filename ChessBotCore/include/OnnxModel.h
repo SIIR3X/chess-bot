@@ -113,9 +113,9 @@ private:
 	 * @param iouThresh IOU threshold for suppression.
 	 * @param keep Indices of boxes kept after suppression.
 	 */
-	void nms(const std::vector <cv::Rect>& boxes,
-			 const std::vector<float>& scores,
-			 float iouThresh, std::vector<int>& keep) const;
+	static void nms(const std::vector <cv::Rect>& boxes,
+				    const std::vector<float>& scores,
+				    float iouThresh, std::vector<int>& keep);
 
 	// --- Model parameters ---
 	int inputWidth_;			///< Model input width.
