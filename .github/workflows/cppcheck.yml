@@ -1,31 +1,29 @@
-name: C++ Code Analysis with CppCheck
+name: C++ Tests (Debug)
 
 on:
   push:
-    branches:
-      - main
-      - staging
+    branches: [main, staging]
   pull_request:
-    branches: ['*']
+    branches: [main, staging]
 
 jobs:
-  cppcheck:
-    name: CppCheck Analysis
-    runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install cppcheck
-        run: sudo apt-get install -y cppcheck
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
 
-      - name: Run cppcheck
+      - name: Build ChessBotCore (Debug)
+        run: msbuild ChessBotCore/ChessBotCore.vcxproj /p:Configuration=Debug
+
+      - name: Build ChessBotTests (Debug)
+        run: msbuild ChessBotTests/ChessBotTests.vcxproj /p:Configuration=Debug
+
+      - name: Run tests
         run: |
-          cppcheck --enable=all \
-                   --std=c++20 \
-                   --language=c++ \
-                   --inconclusive \
-                   --suppress=missingIncludeSystem \
-                   -I ChessBotCore/include \
-                   ChessBotCore/src
+          cd ChessBotTests\\Debug
+          ChessBotTests.exe
