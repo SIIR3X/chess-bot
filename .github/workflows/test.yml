@@ -1,41 +1,39 @@
-name: C++ Unit Tests with Google Test
+name: CI ChessBot Tests
 
 on:
   push:
-    branches: [main, staging]
+    branches: [ main, staging ]
   pull_request:
+    branches: [ main, staging ]
 
 jobs:
-  googletest:
-    name: GoogleTest on Windows
+  build-and-test:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install vcpkg and OpenCV
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Add Qt to PATH
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.9.0'
+          arch: win64_msvc2019_64
+
+      - name: Build Solution
+        run: msbuild ChessBot.sln /p:Configuration=Release
+
+      - name: Run ChessBotTests
         run: |
-          git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          .\bootstrap-vcpkg.bat
-          .\vcpkg.exe install opencv
+          cd ChessBotTests\Release
+          ChessBotTests.exe --gtest_output=xml:test_results.xml
 
-      - name: Integrate vcpkg with MSBuild
-        run: |
-          cd vcpkg
-          .\vcpkg.exe integrate install
-
-      - name: Restore NuGet packages
-        run: nuget restore ChessBot.sln
-
-      - name: Build ChessBotCore
-        run: msbuild ChessBotCore/ChessBotCore.vcxproj /p:Configuration=Debug
-
-      - name: Build ChessBotTests
-        run: msbuild ChessBotTests/ChessBotTests.vcxproj /p:Configuration=Debug
-
-      - name: Run Google Tests
-        run: |
-          cd ChessBotTests/x64/Debug
-          .\ChessBotTests.exe --gtest_output=xml:TestResults.xml
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ChessBotTests/Release/test_results.xml
