@@ -109,11 +109,6 @@
     <ClCompile Include="ChessBot.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ChessBotCore\ChessBotCore.vcxproj">
-      <Project>{11c41e83-6d2a-4d47-83fe-226f1c1f8518}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

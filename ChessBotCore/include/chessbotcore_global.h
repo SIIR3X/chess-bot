@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef _WIN32
-# ifdef CHESSBOTCORE_LIB
+# ifdef CHESSBOTCORE_EXPORTS
 #  define CHESSBOTCORE_EXPORT __declspec(dllexport)
 # else
 #  define CHESSBOTCORE_EXPORT __declspec(dllimport)

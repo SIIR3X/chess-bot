@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "pch.h"
 #include "chessbotcore_global.h"
 
 #include <atomic>

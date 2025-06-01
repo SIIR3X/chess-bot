@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "OnnxModel.h"
 #include <numeric>
 
