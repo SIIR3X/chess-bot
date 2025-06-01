@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\doxygen.yml = .github\workflows\doxygen.yml
 		LICENSE = LICENSE
 		README.md = README.md
+		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessBotCore", "ChessBotCore\ChessBotCore.vcxproj", "{9D760197-3C32-4AC1-A447-7108C91E174B}"

@@ -9,24 +9,20 @@ on:
     branches: ['*']
 
 jobs:
-  run-tests:
-    name: Build and Run Unit Tests
-    runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: windows-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake g++ libopencv-dev
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
 
-      - name: Configure CMake
-        run: cmake -S . -B build
+      - name: Build Solution
+        run: msbuild ChessBot.sln /p:Configuration=Release
 
-      - name: Build tests
-        run: cmake --build build --config Release
-
-      - name: Run tests
+      - name: Run Tests
         run: |
-          cd build
-          ctest --output-on-failure
+          cd ChessBotTests\Release
+          ChessBotTests.exe
