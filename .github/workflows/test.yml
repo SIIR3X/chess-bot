@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main, staging]
 
+env:
+  OpenCVInstallDir: D:\a\chess-bot\chess-bot\opencv\build
+
 jobs:
   build-and-test:
     runs-on: windows-latest
@@ -17,13 +20,18 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Download and Extract OpenCV
+        run: |
+          curl -L -o opencv.zip https://github.com/opencv/opencv/releases/download/4.5.5/opencv-4.5.5-vc14_vc15.zip
+          7z x opencv.zip -oopencv
+
       - name: Build ChessBotCore (Debug)
-        run: msbuild ChessBotCore/ChessBotCore.vcxproj /p:Configuration=Debug /p:AdditionalIncludeDirectories="ChessBotCore\\include"
+        run: msbuild ChessBotCore/ChessBotCore.vcxproj /p:Configuration=Debug
 
       - name: Build ChessBotTests (Debug)
-        run: msbuild ChessBotTests/ChessBotTests.vcxproj /p:Configuration=Debug /p:AdditionalIncludeDirectories="ChessBotCore\\include"
+        run: msbuild ChessBotTests/ChessBotTests.vcxproj /p:Configuration=Debug
 
       - name: Run tests
         run: |
-          cd ChessBotTests\\Debug
+          cd ChessBotTests\Debug
           ChessBotTests.exe
