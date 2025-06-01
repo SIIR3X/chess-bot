@@ -1,9 +1,10 @@
 /**
  * @file ScreenManager.h
- * @brief Singleton class to access and manage available screens using QScreen.
+ * @brief Singleton class to access and manage available screens without using Qt.
  *
  * Provides access to the list of screens, primary screen, and utility methods
  * to retrieve screens by index or name. Used in the ChessBotCore module for screen capture.
+ * This version uses standard C++ and platform APIs to remain portable and testable in CI.
  *
  * @author Lucas
  * @date 2025-05-31
@@ -13,16 +14,27 @@
 
 #include "chessbotcore_global.h"
 
-#include <QtGui/QScreen>
-#include <QtCore/QVector>
+#include <vector>
+#include <string>
+
+ /**
+  * @struct ScreenInfo
+  * @brief Stores basic information about a screen.
+  *
+  * This structure holds screen dimensions and an optional name identifier.
+  */
+struct ScreenInfo {
+	int width;               ///< Width of the screen in pixels.
+	int height;              ///< Height of the screen in pixels.
+	std::string name;        ///< Name or identifier of the screen.
+};
 
 /**
  * @class ScreenManager
- * @brief Manages access to available screens (QScreen) in the system.
+ * @brief Manages access to available screens using platform APIs (no Qt dependency).
  *
- * This class follows the singleton pattern and provides utility methods
- * to retrieve information about available screens. It's used for screen capture
- * and screen-based logic within ChessBotCore.
+ * Follows the singleton pattern and provides utility methods
+ * to retrieve screen information for screen capture or screen-based logic.
  */
 class CHESSBOTCORE_EXPORT ScreenManager
 {
@@ -35,29 +47,29 @@ public:
 
 	/**
 	 * @brief Returns a list of all available screens.
-	 * @return QVector of QScreen pointers.
+	 * @return std::vector of ScreenInfo objects.
 	 */
-	QVector<QScreen*> screens() const;
+	std::vector<ScreenInfo> screens() const;
 
 	/**
 	 * @brief Returns the screen at the given index.
 	 * @param index Index of the screen in the list.
-	 * @return Pointer to QScreen, or nullptr if index is invalid.
+	 * @return Pointer to ScreenInfo, or nullptr if index is invalid.
 	 */
-	QScreen* screen(int index) const;
+	const ScreenInfo* screen(int index) const;
 
 	/**
 	 * @brief Returns the screen with the given name.
-	 * @param name Name of the screen (as given by QScreen::name()).
-	 * @return Pointer to QScreen, or nullptr if not found.
+	 * @param name Name of the screen.
+	 * @return Pointer to ScreenInfo, or nullptr if not found.
 	 */
-	QScreen* screen(const QString& name) const;
+	const ScreenInfo* screen(const std::string& name) const;
 
 	/**
 	 * @brief Returns the primary screen.
-	 * @return Pointer to the primary QScreen.
+	 * @return Pointer to the primary ScreenInfo, or nullptr if unavailable.
 	 */
-	QScreen* primaryScreen() const;
+	const ScreenInfo* primaryScreen() const;
 
 private:
 	ScreenManager() = default;
