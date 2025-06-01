@@ -1,4 +1,4 @@
-name: C++ Tests
+name: Run Google Tests
 
 on:
   push:
@@ -9,24 +9,26 @@ on:
     branches: ['*']
 
 jobs:
-  run-tests:
-    name: Build and Run Unit Tests
-    runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake g++ libopencv-dev
+    - name: Setup MSBuild path
+      uses: microsoft/setup-msbuild@v2
 
-      - name: Configure CMake
-        run: cmake -S . -B build
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
 
-      - name: Build tests
-        run: cmake --build build --config Release
+    - name: Restore NuGet packages
+      run: nuget restore ChessBot/ChessBot.sln
 
-      - name: Run tests
-        run: |
-          cd build
-          ctest --output-on-failure
+    - name: Build solution
+      run: msbuild ChessBot/ChessBot.sln /p:Configuration=Debug
+
+    - name: Run Google Tests
+      run: |
+        cd ChessBot/ChessBotTests/x64/Debug
+        .\ChessBotTests.exe --gtest_output=xml:TestResults.xml
