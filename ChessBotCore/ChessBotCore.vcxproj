@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\ImageUtils.h" />
+    <ClInclude Include="include\ChessboardAnalyzer.h" />
     <ClInclude Include="include\chessbotcore_global.h" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\OnnxModel.h" />
@@ -151,6 +153,8 @@
     <ClInclude Include="include\ScreenRecorder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ImageUtils.cpp" />
+    <ClCompile Include="src\ChessboardAnalyzer.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\OnnxModel.cpp" />
     <ClCompile Include="src\pch.cpp">
